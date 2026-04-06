@@ -5,38 +5,42 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import ProductManagement.entity.Product;
+import ProductManagement.repository.ProductRepository;
 
 @Service
 public class ProductServiceImplementation implements ProductService {
+	ProductRepository repo;
+	public ProductServiceImplementation(ProductRepository repo) {
+		super();
+		this.repo = repo;
+	}
 
 	@Override
 	public String addProduct(Product prod) {
-		// TODO Auto-generated method stub
-		return null;
+		repo.save(prod);
+		return "Product added successfully";
 	}
 
 	@Override
 	public String updateProduct(Product prod) {
-		// TODO Auto-generated method stub
-		return null;
+		repo.save(prod);
+		return "Product updated successfully";
 	}
 
 	@Override
 	public String deleteProduct(Long prodId) {
-		// TODO Auto-generated method stub
-		return null;
+		repo.deleteById(prodId);
+		return "Product deleted successfully";
 	}
 
 	@Override
-	public String viewProduct(Long prodId) {
-		// TODO Auto-generated method stub
-		return null;
+	public Product viewProduct(Long prodId) {
+		return repo.findById(prodId).get();
 	}
 
 	@Override
 	public List<Product> viewAllProducts() {
-		// TODO Auto-generated method stub
-		return null;
+		return repo.findAll();
 	}
 
 }
