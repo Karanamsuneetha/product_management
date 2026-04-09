@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>View All Products</title>
+    <title>View Product</title>
     <style>
         * { box-sizing: border-box; font-family: Arial, sans-serif; }
         body { margin: 0; background: #f8fafc; }
@@ -24,13 +24,22 @@
             font-weight: bold;
         }
         .container {
-            width: 95%;
-            max-width: 1100px;
+            width: 90%;
+            max-width: 800px;
             margin: 35px auto;
             background: white;
             padding: 25px;
             border-radius: 14px;
             box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 6px; font-weight: bold; }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 14px;
         }
         button {
             background: #2563eb;
@@ -41,11 +50,9 @@
             font-size: 15px;
             font-weight: bold;
             cursor: pointer;
-            margin-bottom: 18px;
         }
         .message {
-            margin-top: 10px;
-            margin-bottom: 15px;
+            margin-top: 18px;
             padding: 12px;
             border-radius: 8px;
             background: #dbeafe;
@@ -55,6 +62,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 18px;
         }
         table, th, td {
             border: 1px solid #cbd5e1;
@@ -70,51 +78,39 @@
 </head>
 <body>
     <header>
-        <h1>View All Products</h1>
+        <h1>Search Product</h1>
         <a class="btn-link" href="product_management.html">Back</a>
     </header>
 
     <div class="container">
-        <button onclick="viewAllProducts()">Load All Products</button>
+        <div class="form-group">
+            <label>Product ID</label>
+            <input type="number" id="viewId" />
+        </div>
+
+        <button onclick="viewProduct()">Search Product</button>
 
         <div id="messageArea"></div>
         <div id="resultArea"></div>
     </div>
 
     <script>
-        async function viewAllProducts() {
-            const response = await fetch("/viewAllProducts");
+        async function viewProduct() {
+            const id = document.getElementById("viewId").value;
+
+            const response = await fetch(`/viewProduct/${id}`);
 
             if (!response.ok) {
                 document.getElementById("messageArea").innerHTML =
-                    `<div class="message">Unable to fetch products.</div>`;
+                    `<div class="message">Unable to fetch product.</div>`;
                 document.getElementById("resultArea").innerHTML = "";
                 return;
             }
 
-            const products = await response.json();
+            const product = await response.json();
 
             document.getElementById("messageArea").innerHTML =
-                `<div class="message">All products fetched successfully.</div>`;
-
-            if (!products || products.length === 0) {
-                document.getElementById("resultArea").innerHTML =
-                    "<p>No products found.</p>";
-                return;
-            }
-
-            let rows = "";
-            products.forEach(product => {
-                rows += `
-                    <tr>
-                        <td>${product.id ?? ""}</td>
-                        <td>${product.name ?? ""}</td>
-                        <td>${product.description ?? ""}</td>
-                        <td>${product.price ?? ""}</td>
-                        <td>${product.photoUrl ?? ""}</td>
-                    </tr>
-                `;
-            });
+                `<div class="message">Product fetched successfully.</div>`;
 
             document.getElementById("resultArea").innerHTML = `
                 <table>
@@ -125,7 +121,13 @@
                         <th>Price</th>
                         <th>Photo URL</th>
                     </tr>
-                    ${rows}
+                    <tr>
+                        <td>${product.id ?? ""}</td>
+                        <td>${product.name ?? ""}</td>
+                        <td>${product.description ?? ""}</td>
+                        <td>${product.price ?? ""}</td>
+                        <td>${product.photoUrl ?? ""}</td>
+                    </tr>
                 </table>
             `;
         }
