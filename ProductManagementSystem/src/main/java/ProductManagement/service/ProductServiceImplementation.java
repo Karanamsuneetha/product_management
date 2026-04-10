@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import ProductManagement.dto.ProductRequestdto;
 import ProductManagement.entity.Product;
 import ProductManagement.repository.ProductRepository;
 
@@ -16,8 +17,13 @@ public class ProductServiceImplementation implements ProductService {
 	}
 
 	@Override
-	public String addProduct(Product prod) {
-		repo.save(prod);
+	public String addProduct(ProductRequestdto prod) {
+		Product p = new Product();
+		p.setName(prod.getName());
+		p.setDescription(prod.getDescription());
+		p.setPrice(prod.getPrice());
+		p.setPhotoUrl(prod.getPhotoUrl());
+		repo.save(p);
 		return "Product added successfully";
 	}
 

@@ -11,8 +11,8 @@ public class Product {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	Long id;
 	String name;
-	int price;
 	String description;
+	int price;
 	String photoUrl;
 	public Product() {
 		super();
